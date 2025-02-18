@@ -1,0 +1,17 @@
+{
+  "arrowParens": "avoid",
+  "bracketSameLine": true,
+  "bracketSpacing": true,
+  "trailingComma": "all",
+  "overrides": [
+    {
+      "files": [
+        ".eslintrc.js",
+        "babel.config.js"
+      ],
+      "options": {
+        "singleQuote": false
+      }
+    }
+  ]
+}
