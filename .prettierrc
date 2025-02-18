@@ -3,6 +3,7 @@
   "bracketSameLine": true,
   "bracketSpacing": true,
   "trailingComma": "all",
+  "singleQuote": true,
   "overrides": [
     {
       "files": [
