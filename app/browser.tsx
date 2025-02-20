@@ -1,21 +1,20 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { router, useLocalSearchParams } from 'expo-router';
-import { useMemo, useRef, useState } from 'react';
+import { useContext, useMemo, useRef, useState } from 'react';
 import {
   Animated,
-  Platform,
   SafeAreaView,
-  StatusBar,
+  Share,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import WebView from 'react-native-webview';
+import { WebViewContext } from '../components/WebViewProvider';
 
 const styles = StyleSheet.create({
   safearea: {
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
     flex: 1,
     backgroundColor: 'black',
   },
@@ -85,6 +84,7 @@ const NavButton = ({
 export default function BrowserScreen() {
   const params = useLocalSearchParams();
   const initialUrl = params.initialUrl as string;
+  const context = useContext(WebViewContext);
   const [url, setUrl] = useState(initialUrl);
   const [canGoBack, setCanGoBack] = useState(false);
   const [canGoForward, setCanGoForward] = useState(false);
@@ -115,7 +115,12 @@ export default function BrowserScreen() {
         />
       </View>
       <WebView
-        ref={webViewRef}
+        ref={ref => {
+          webViewRef.current = ref;
+          if (ref !== null) {
+            context?.addWebView(ref);
+          }
+        }}
         source={{ uri: initialUrl }}
         onNavigationStateChange={e => {
           setUrl(e.url);
@@ -157,6 +162,12 @@ export default function BrowserScreen() {
           iconName="reload"
           onPress={() => {
             webViewRef.current?.reload();
+          }}
+        />
+        <NavButton
+          iconName="shaker-outline"
+          onPress={() => {
+            Share.share({ message: url });
           }}
         />
       </View>
